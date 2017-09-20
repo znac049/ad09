@@ -1,74 +1,70 @@
                         pragma  autobranchlength           
                         pragma  6809                       
 
-                        org     $6000                      
-
+                        org     $c000                      
 
 
 ; Labels:
 ;
-ThreeKHz              = $2001
-VGHalted              = $2002
-ShieldSW              = $2003
-FireSW                = $2004
-SlamSW                = $2006
-SelfTestSW            = $2007
-LCoinSW               = $2400
-CCoinSW               = $2401
-RCoinSW               = $2402
-PlayerOneSW           = $2403
-PlayerTwoSW           = $2404
-ThrustSW              = $2405
-RotateRSW             = $2406
-RotateLSW             = $2407
-Option87              = $2800
-Option65              = $2801
-Option43              = $2802
-Option21              = $2803
-Pk_F1_Pot0            = $2c00
-Pk_C1_Pot1            = $2c01
-Pk_F2_Pot2            = $2c02
-Pk_C2_Pot3            = $2c03
-Pk_F3_Pot4            = $2c04
-Pk_C3_Pot5            = $2c05
-Pk_F4_Pot6            = $2c06
-Pk_C4_Pot7            = $2c07
-Pk_Ctl_All            = $2c08
-Pk_STim_Kbc           = $2c09
-Pk_SkRes_Rnd          = $2c0a
-Pk_PotGo              = $2c0b
-Pk_SerData            = $2c0d
-Pk_IrqCtl             = $2c0e
-Pk_SerCtl             = $2c0f
-EaromRd               = $2c40
-StartVG               = $3000
-LatchEA               = $3200
-WdogReset             = $3400
-ExplodeCtrl           = $3600
-VGReset               = $3800
-EAControl             = $3a00
-P1LED                 = $3c00
-P2LED                 = $3c01
-ThrustSnd             = $3c03
-BankSel               = $3c04
-LCount                = $3c05
-CCount                = $3c06
-RCoin                 = $3c07
-NoiseReset            = $3e00
-VRAM                  = $4000
-Reset_Vec             = $fffc
-NMI_Vec               = $fffe
-IRQ_Vec               = $fffa
-L4ba2                 = $4ba2
-L4be1                 = $4be1
-L4a9e                 = $4a9e
-L49bb                 = $49bb
-L48be                 = $48be
-L4800                 = $4800
-L4a22                 = $4a22
-L49e7                 = $49e7
-L4a32                 = $4a32
-L4a75                 = $4a75
+ThreeKHz                = $2001
+VGHalted                = $2002
+ShieldSW                = $2003
+FireSW                  = $2004
+SlamSW                  = $2006
+SelfTestSW              = $2007
+LCoinSW                 = $2400
+CCoinSW                 = $2401
+RCoinSW                 = $2402
+PlayerOneSW             = $2403
+PlayerTwoSW             = $2404
+ThrustSW                = $2405
+RotateRSW               = $2406
+RotateLSW               = $2407
+Option87                = $2800
+Option65                = $2801
+Option43                = $2802
+Option21                = $2803
+Pk_F1_Pot0              = $2c00
+Pk_C1_Pot1              = $2c01
+Pk_F2_Pot2              = $2c02
+Pk_C2_Pot3              = $2c03
+Pk_F3_Pot4              = $2c04
+Pk_C3_Pot5              = $2c05
+Pk_F4_Pot6              = $2c06
+Pk_C4_Pot7              = $2c07
+Pk_Ctl_All              = $2c08
+Pk_STim_Kbc             = $2c09
+Pk_SkRes_Rnd            = $2c0a
+Pk_PotGo                = $2c0b
+Pk_SerData              = $2c0d
+Pk_IrqCtl               = $2c0e
+Pk_SerCtl               = $2c0f
+EaromRd                 = $2c40
+StartVG                 = $3000
+LatchEA                 = $3200
+WdogReset               = $3400
+ExplodeCtrl             = $3600
+VGReset                 = $3800
+EAControl               = $3a00
+P1LED                   = $3c00
+P2LED                   = $3c01
+ThrustSnd               = $3c03
+BankSel                 = $3c04
+LCount                  = $3c05
+CCount                  = $3c06
+RCoin                   = $3c07
+NoiseReset              = $3e00
+VRAM                    = $4000
+L4ba2                   = $4ba2
+L4be1                   = $4be1
+L4a9e                   = $4a9e
+L49bb                   = $49bb
+L48be                   = $48be
+L4800                   = $4800
+L4a22                   = $4a22
+L49e7                   = $49e7
+L4a32                   = $4a32
+L4a75                   = $4a75
 
 
 L6000                   jsr     L7be3                    ; 6000:  20 E3 7B
@@ -89,7 +85,7 @@ L6000                   jsr     L7be3                    ; 6000:  20 E3 7B
 
 L6011                   jsr     L6959                    ; 6011:  20 59 69
 
-L6014                   andb    VGHalted                 ; 6014:  2C 02 20
+L6014                   tst     VGHalted                 ; 6014:  2C 02 20
 
                         bmi     L6014                    ; 6017:  30 FB
 
@@ -302,7 +298,7 @@ L6102                   exg     d,y                      ; 6102:  CA
 
                         bpl     L60fb                    ; 6103:  10 F6
 
-                        andb    <$71                     ; 6105:  24 71
+                        tst     <$71                     ; 6105:  24 71
 
                         bmi     L610b                    ; 6107:  30 02
 
@@ -534,7 +530,7 @@ L61af                   cmpb    <$09                     ; 61AF:  C5 09
 
 L61d2                   jmp     L6116                    ; 61D2:  4C 16 61
 
-L61d5                   andb    <$73                     ; 61D5:  24 73
+L61d5                   tst     <$73                     ; 61D5:  24 73
 
                         bpl     L61db                    ; 61D7:  10 02
 
@@ -605,7 +601,7 @@ L6221                   exg     d,y                      ; 6221:  A0 FF
                         ldb     #$ff                     ; Immediate
                         exg     d,y                        
 
-                        andb    <$12                     ; 6223:  24 12
+                        tst     <$12                     ; 6223:  24 12
 
                         bmi     L6254                    ; 6225:  30 2D
 
@@ -1440,11 +1436,11 @@ L649d                   exg     d,x                      ; 649D:  86 FF
 
                         rts                              ; 649F:  60
 
-L64a0                   andb    <$73                     ; 64A0:  24 73
+L64a0                   tst     <$73                     ; 64A0:  24 73
 
                         bmi     L649d                    ; 64A2:  30 F9
 
-                        andb    <$fe                     ; 64A4:  24 FE
+                        tst     <$fe                     ; 64A4:  24 FE
 
                         bpl     L649d                    ; 64A6:  10 F5
 
@@ -1957,7 +1953,7 @@ L6624                   ldb     <$76                     ; 6624:  A5 76
                         ldb     $44,x                    ; Zero page, X
                         exg     d,y                        
 
-                        andb    RotateLSW                ; 662E:  2C 07 24
+                        tst     RotateLSW                ; 662E:  2C 07 24
 
                         bpl     L6634                    ; 6631:  10 01
 
@@ -1966,7 +1962,7 @@ L6624                   ldb     <$76                     ; 6624:  A5 76
                         incb                               
                         exg     d,y                        
 
-L6634                   andb    RotateRSW                ; 6634:  2C 06 24
+L6634                   tst     RotateRSW                ; 6634:  2C 06 24
 
                         bpl     L663c                    ; 6637:  10 03
 
@@ -2066,7 +2062,7 @@ L6659                   lsr     <$73                     ; 6659:  46 73
 
 L6680                   rts                              ; 6680:  60
 
-L6681                   andb    <$73                     ; 6681:  24 73
+L6681                   tst     <$73                     ; 6681:  24 73
 
                         bpl     L6680                    ; 6683:  10 FB
 
@@ -2387,7 +2383,7 @@ L6774                   adcb    $02a5,x                  ; 6774:  7D A5 02
 
 L678b                   jmp     L66e7                    ; 678B:  4C E7 66
 
-L678e                   andb    <$1b                     ; 678E:  24 1B
+L678e                   tst     <$1b                     ; 678E:  24 1B
 
                         bpl     L67ac                    ; 6790:  10 1A
 
@@ -2735,7 +2731,7 @@ L68bb                   lsrb                             ; 68BB:  4A
 
                         ldb     $68e1,x                  ; 68BF:  BD E1 68
 
-                        andb    <$73                     ; 68C2:  24 73
+                        tst     <$73                     ; 68C2:  24 73
 
                         bpl     L68c7                    ; 68C4:  10 01
 
@@ -4455,7 +4451,7 @@ L6e80                   orb     <$09                     ; 6E80:  05 09
 
                         jsr     L6e96                    ; 6E86:  20 96 6E
 
-                        andb    ThrustSW                 ; 6E89:  2C 05 24
+                        tst     ThrustSW                 ; 6E89:  2C 05 24
 
                         bpl     L6ec5                    ; 6E8C:  10 37
 
@@ -5606,7 +5602,7 @@ L71c4                   lda     #0                       ; 71C4:  AA
                         fcb     $C3,$20,$5C,$CA            
                         fcb     $56,$2D,$C2,$8B            
                         fcb     $64,$6C,$67                
-L74e7                   andb    <$73                     ; 74E7:  24 73
+L74e7                   tst     <$73                     ; 74E7:  24 73
 
                         bpl     L7514                    ; 74E9:  10 29
 
@@ -5813,7 +5809,7 @@ L7581                   ldb     $023a,x                  ; 7581:  BD 3A 02
 
 L758b                   ldb     $0221,y                  ; 758B:  B9 21 02
 
-                        andb    <$10                     ; 758E:  24 10
+                        tst     <$10                     ; 758E:  24 10
 
                         bpl     L7599                    ; 7590:  10 07
 
@@ -5946,7 +5942,7 @@ L75b1                   ldb     $02a5,y                  ; 75B1:  B9 A5 02
                         fcb     $FF,$0F,$00,$00            
                         fcb     $01,$1F,$A2,$00            
                         fcb     $01,$00,$00                
-L770d                   andb    $7741                    ; 770D:  2C 41 77
+L770d                   tst     $7741                    ; 770D:  2C 41 77
 
                         andcc   #$fe                     ; 7710:  18
 
@@ -6230,7 +6226,7 @@ L7848                   stb     $9b,x                    ; 7848:  95 9B
 
                         rts                              ; 7850:  60
 
-IRQ_Handler             andb    $01ff                    ; 7851:  2C FF 01
+NMI_Handler             tst     $01ff                    ; 7851:  2C FF 01
 
                         bpl     L7857                    ; 7854:  10 01
 
@@ -7324,7 +7320,7 @@ L7bc7                   exg     d,y                      ; 7BC7:  A4 CD
 
 L7be2                   rts                              ; 7BE2:  60
 
-L7be3                   andb    VGHalted                 ; 7BE3:  2C 02 20
+L7be3                   tst     VGHalted                 ; 7BE3:  2C 02 20
 
                         bmi     L7be3                    ; 7BE6:  30 FB
 
@@ -7650,7 +7646,14 @@ L7cd5                   exg     d,y                      ; 7CD5:  A0 00
 
                         jmp     L7a55                    ; 7CDD:  4C 55 7A
 
-Reset_Handler           exg     d,x                      ; 7CE0:  A2 FE
+
+
+Reset_Handler		andcc	#$af			 ; disable IRQ/FIRQ
+			lds	#$a000			 ; Use memory on 6809 board
+			lda	#0			 ; Point DP at Page 0
+			tfr	a,dp
+
+			exg     d,x                      ; 7CE0:  A2 FE
                         lda     #0                         
                         ldb     #$fe                     ; Immediate
                         exg     d,x                        
@@ -7745,7 +7748,7 @@ L7d23                   eorb    $0100,x                  ; 7D23:  5D 00 01
                         incb                               
                         exg     d,x                        
 
-                        andb    SelfTestSW               ; 7D2C:  2C 07 20
+                        tst     SelfTestSW               ; 7D2C:  2C 07 20
 
                         bpl     L7d36                    ; 7D2F:  10 05
 
@@ -7995,11 +7998,11 @@ L7dba                   exg     d,x                      ; 7DBA:  8E 00 2C
                         ldb     #$00                     ; Immediate
                         exg     d,x                        
 
-L7dc4                   andb    ThreeKHz                 ; 7DC4:  2C 01 20
+L7dc4                   tst     ThreeKHz                 ; 7DC4:  2C 01 20
 
                         bpl     L7dc4                    ; 7DC7:  10 FB
 
-L7dc9                   andb    ThreeKHz                 ; 7DC9:  2C 01 20
+L7dc9                   tst     ThreeKHz                 ; 7DC9:  2C 01 20
 
                         bmi     L7dc9                    ; 7DCC:  30 FB
 
@@ -8028,11 +8031,11 @@ L7dc9                   andb    ThreeKHz                 ; 7DC9:  2C 01 20
                         ldb     #$08                     ; Immediate
                         exg     d,y                        
 
-L7ddc                   andb    ThreeKHz                 ; 7DDC:  2C 01 20
+L7ddc                   tst     ThreeKHz                 ; 7DDC:  2C 01 20
 
                         bpl     L7ddc                    ; 7DDF:  10 FB
 
-L7de1                   andb    ThreeKHz                 ; 7DE1:  2C 01 20
+L7de1                   tst     ThreeKHz                 ; 7DE1:  2C 01 20
 
                         bmi     L7de1                    ; 7DE4:  30 FB
 
@@ -8170,7 +8173,7 @@ L7e4c                   ldb     ThreeKHz                 ; 7E4C:  AD 01 20
 
                         bpl     L7e47                    ; 7E52:  10 F3
 
-L7e54                   andb    VGHalted                 ; 7E54:  2C 02 20
+L7e54                   tst     VGHalted                 ; 7E54:  2C 02 20
 
                         bmi     L7e54                    ; 7E57:  30 FB
 
@@ -8456,7 +8459,7 @@ L7f38                   inc     <$76                     ; 7F38:  E6 76
 
                         bpl     L7f57                    ; 7F46:  10 0F
 
-                        andb    <$21                     ; 7F48:  24 21
+                        tst     <$21                     ; 7F48:  24 21
 
                         bmi     L7f57                    ; 7F4A:  30 0B
 
@@ -8687,9 +8690,20 @@ L7fe2                   exg     d,y                      ; 7FE2:  CA
 
                         rts                              ; 7FED:  60
 
+No_Handler		rti
+
                         fcb     $38,$30,$1C,$1E            
                         fcb     $24,$28,$06,$06            
                         fcb     $04,$04,$04,$04            
-                        fdb     IRQ_Handler              ; 7FFA
-                        fdb     Reset_Handler            ; 7FFC
-                        fdb     Reset_Handler            ; 7FFE
+
+
+; Vectors
+			org     $fff0			 ; Vectors
+			fdb	No_Handler		 ; Reserved
+			fdb	No_Handler		 ; SWI3
+			fdb	No_Handler		 ; SWI2
+			fdb	No_Handler		 ; FIRQ
+			fdb	No_Handler		 ; IRQ
+			fdb	No_Handler		 ; SWI
+			fdb	NMI_Handler		 ; NMI
+			fdb	Reset_Handler		 ; RESET
