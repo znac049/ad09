@@ -7653,31 +7653,8 @@ Reset_Handler		andcc	#$af			 ; disable IRQ/FIRQ
 			lda	#0			 ; Point DP at Page 0
 			tfr	a,dp
 
-			exg     d,x                      ; 7CE0:  A2 FE
-                        lda     #0                         
-                        ldb     #$fe                     ; Immediate
-                        exg     d,x                        
-
-                        tfr     d,u                      ; 7CE2:  9A
-                        tfr     x,d                        
-                        tfr     cc,dp                      
-                        incb                               
-                        tfr     dp,cc                      
-                        lda     #0                         
-                        tfr     a,dp                       
-                        tfr     d,s                        
-                        tfr     u,d                        
-
-                                                         ; 7CE3:  D8
-
-                        exg     d,x                      ; 7CE4:  A2 00
-                        lda     #0                         
-                        ldb     #$00                     ; Immediate
-                        exg     d,x                        
-
-                        exg     d,x                      ; 7CE6:  8E 0F 2C
-                        stb     Pk_SerCtl                ; Absolute
-                        exg     d,x                        
+			ldb	#0
+                        stb     Pk_SerCtl                ; Initialise Pokey
 
 L7ce9                   ldb     #$11                     ; 7CE9:  A9 11
 

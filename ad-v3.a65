@@ -98,6 +98,8 @@ L601c                   lsr     $75                      ; 601C:  46 75
                         and     #$1f                     ; 603F:  29 1F
                         ora     #$40                     ; 6041:  09 40
                         sta     $04                      ; 6043:  85 04
+
+; Update display
                         sta     StartVG                  ; 6045:  8D 00 30
                         sta     WdogReset                ; 6048:  8D 00 34
                         inc     $76                      ; 604B:  E6 76
@@ -2188,12 +2190,22 @@ L7148                   lda     #$c5                     ; 7148:  A9 C5
                         sta     $0a                      ; 7153:  85 0A
                         stx     $09                      ; 7155:  86 09
                         bne     L7187                    ; 7157:  D0 2E
+
+; Option21 - language selection - bottom two bits
+;  00 - English
+;  01 - German
+;  02 - French
+;  03 - Spanish
 L7159                   lda     Option21                 ; 7159:  AD 03 28
                         and     #$03                     ; 715C:  29 03
+
                         ldx     #$10                     ; 715E:  A2 10
                         stx     $01                      ; 7160:  86 01
+
 L7162                   asl     A                        ; 7162:  0A
                         tax                              ; 7163:  AA
+
+; X = 0 - English, 2 - German, 4 - French, 6 - Spanish
                         lda     $71f1,X                  ; 7164:  BD F1 71
                         sta     $0a                      ; 7167:  85 0A
                         lda     $71f0,X                  ; 7169:  BD F0 71
@@ -2255,200 +2267,254 @@ L71c4                   tax                              ; 71C4:  AA
                         fcb     $68,$B6,$72,$B6            
                         fcb     $0C,$AA,$0C,$A2            
                         fcb     $0C,$9A,$0C,$92            
-                        fcb     $68,$C6,$6E,$A7            
-                        fcb     $56,$42,$5A,$42            
+
+; 71F0
+                        fcb     $68,$C6
+			fcb	$6E,$A7            
+                        fcb     $56,$42
+			fcb	$5A,$42            
+
                         fcb     $58,$42,$68,$32            
                         fcb     $64,$C6,$6E,$D2            
+; 7200
                         fcb     $F8,$71,$AE,$72            
                         fcb     $7D,$73,$38,$74            
                         fcb     $0E,$16,$1C,$32            
                         fcb     $44,$58,$70,$78            
+; 7210
                         fcb     $7E,$8A,$94,$A0            
                         fcb     $A6,$B0,$63,$56            
                         fcb     $60,$6E,$3C,$EC            
                         fcb     $4D,$C0,$A4,$0A            
+; 7220
                         fcb     $EA,$6C,$08,$00            
                         fcb     $EC,$F2,$B0,$6E            
                         fcb     $3C,$EC,$48,$5A            
                         fcb     $B8,$66,$92,$42            
+; 7230
                         fcb     $9A,$82,$C3,$12            
                         fcb     $0E,$12,$90,$4C            
                         fcb     $4D,$F1,$A4,$12            
                         fcb     $2D,$D2,$0A,$64            
+; 7240
                         fcb     $C2,$6C,$0F,$66            
                         fcb     $CD,$82,$6C,$9A            
                         fcb     $C3,$4A,$85,$C0            
                         fcb     $A5,$92,$BD,$C2            
+; 7250
                         fcb     $B4,$F0,$2E,$12            
                         fcb     $0E,$26,$0D,$D2            
                         fcb     $82,$4E,$C0,$60            
                         fcb     $4E,$30,$4D,$80            
+; 7260
                         fcb     $A5,$92,$BD,$C2            
                         fcb     $BB,$1A,$4C,$10            
                         fcb     $0E,$D8,$4C,$82            
                         fcb     $82,$70,$C2,$6C            
+; 7270
                         fcb     $0B,$6E,$09,$E6            
                         fcb     $B5,$92,$3E,$00            
                         fcb     $A5,$92,$BD,$C2            
                         fcb     $BE,$0A,$B6,$00            
+; 7280
                         fcb     $59,$62,$48,$66            
                         fcb     $D2,$6D,$18,$4E            
                         fcb     $9B,$64,$09,$02            
                         fcb     $3D,$92,$43,$70            
+; 7290
                         fcb     $B8,$00,$18,$4E            
                         fcb     $9B,$64,$08,$C2            
                         fcb     $3D,$92,$43,$71            
                         fcb     $20,$4E,$9B,$64            
+; 72A0
                         fcb     $B8,$46,$09,$EC            
                         fcb     $4A,$1A,$C0,$00            
                         fcb     $3D,$92,$43,$70            
                         fcb     $B8,$40,$20,$56            
+; 72B0
                         fcb     $2C,$52,$0C,$5A            
                         fcb     $93,$62,$CC,$40            
                         fcb     $34,$E4,$CD,$C2            
                         fcb     $2E,$03,$0D,$17            
+; 72C0
                         fcb     $1D,$37,$4F,$67            
                         fcb     $7D,$8B,$91,$9D            
                         fcb     $A9,$B5,$BB,$64            
                         fcb     $D2,$3B,$2E,$C2            
+; 72D0
                         fcb     $6C,$5A,$4C,$93            
                         fcb     $6F,$BD,$1A,$4C            
                         fcb     $12,$B0,$40,$6B            
                         fcb     $2C,$0A,$6C,$5A            
+; 72E0
                         fcb     $4C,$93,$6E,$0B            
                         fcb     $6E,$C0,$52,$6C            
                         fcb     $92,$B8,$50,$4D            
                         fcb     $82,$F2,$58,$90            
+; 72F0
                         fcb     $4C,$4D,$F0,$4C            
                         fcb     $80,$33,$70,$C2            
                         fcb     $42,$5A,$4C,$4C            
                         fcb     $82,$BB,$52,$0B            
+; 7300
                         fcb     $58,$B2,$42,$6C            
                         fcb     $9A,$C3,$4A,$82            
                         fcb     $64,$0A,$5A,$90            
                         fcb     $00,$F6,$6C,$09            
+; 7310
                         fcb     $B2,$3B,$2E,$C1            
                         fcb     $4C,$4C,$B6,$2B            
                         fcb     $20,$0D,$A6,$C1            
                         fcb     $70,$48,$50,$B6            
+; 7320
                         fcb     $52,$3B,$D2,$90            
                         fcb     $00,$DA,$64,$90            
                         fcb     $4C,$C9,$D8,$BE            
                         fcb     $0A,$32,$42,$9B            
+; 7330
                         fcb     $C2,$BB,$1A,$4C            
                         fcb     $10,$0A,$2C,$CA            
                         fcb     $4E,$7A,$65,$BE            
                         fcb     $0A,$B6,$1E,$94            
+; 7340
                         fcb     $D2,$A2,$92,$0A            
                         fcb     $2C,$CA,$4E,$7A            
                         fcb     $65,$BD,$1A,$4C            
                         fcb     $12,$92,$13,$18            
+; 7350
                         fcb     $62,$CA,$64,$F2            
                         fcb     $42,$20,$6E,$A3            
                         fcb     $52,$82,$40,$18            
                         fcb     $62,$CA,$64,$F2            
+; 7360
                         fcb     $42,$18,$6E,$A3            
                         fcb     $52,$80,$00,$20            
                         fcb     $62,$CA,$64,$F2            
                         fcb     $64,$08,$C2,$BD            
+; 7370
                         fcb     $1A,$4C,$00,$7D            
                         fcb     $92,$43,$70,$48            
                         fcb     $40,$5A,$60,$42            
                         fcb     $5A,$96,$F2,$B2            
+; 7380
                         fcb     $82,$56,$52,$B0            
                         fcb     $7C,$DA,$5A,$0D            
                         fcb     $E8,$6A,$60,$48            
                         fcb     $00,$0D,$17,$1B            
+; 7390
                         fcb     $33,$43,$59,$71            
                         fcb     $7D,$87,$93,$9F            
                         fcb     $AB,$B1,$8A,$5A            
                         fcb     $84,$12,$CD,$82            
+; 73A0
                         fcb     $B9,$E6,$B2,$40            
                         fcb     $74,$F2,$4D,$83            
                         fcb     $D4,$F0,$B2,$42            
                         fcb     $B9,$E6,$B2,$42            
+; 73B0
                         fcb     $4D,$F0,$0E,$64            
                         fcb     $0A,$12,$B8,$46            
                         fcb     $10,$62,$4B,$60            
                         fcb     $82,$72,$B5,$C0            
+; 73C0
                         fcb     $BE,$A8,$0A,$64            
                         fcb     $C5,$92,$F0,$74            
                         fcb     $9D,$C2,$6C,$9A            
                         fcb     $C3,$4A,$82,$6F            
+; 73D0
                         fcb     $A4,$F2,$BD,$D2            
                         fcb     $F0,$6C,$9E,$0A            
                         fcb     $C2,$42,$A4,$F2            
                         fcb     $B0,$74,$9D,$C2            
+; 73E0
                         fcb     $6C,$9A,$C3,$4A            
                         fcb     $82,$6F,$A4,$F2            
                         fcb     $BD,$D2,$F0,$6E            
                         fcb     $63,$52,$82,$02            
+; 73F0
                         fcb     $AE,$4A,$92,$02            
                         fcb     $82,$70,$C5,$92            
                         fcb     $09,$E6,$B5,$92            
                         fcb     $3E,$13,$2D,$28            
+; 7400
                         fcb     $CF,$52,$B0,$6E            
                         fcb     $CD,$82,$BE,$0A            
                         fcb     $B6,$00,$53,$64            
                         fcb     $0A,$12,$0D,$0A            
+; 7410
                         fcb     $B6,$1A,$48,$00            
                         fcb     $18,$68,$6A,$4E            
                         fcb     $48,$48,$0B,$A6            
                         fcb     $CA,$72,$B5,$C0            
+; 7420
                         fcb     $18,$68,$6A,$4E            
                         fcb     $48,$46,$0B,$A6            
                         fcb     $CA,$72,$B0,$00            
                         fcb     $20,$68,$6A,$4E            
+; 7430
                         fcb     $4D,$C2,$18,$5C            
                         fcb     $9E,$52,$CD,$80            
                         fcb     $3D,$92,$43,$70            
                         fcb     $B8,$40,$20,$5C            
+; 7440
                         fcb     $4E,$78,$0C,$5A            
                         fcb     $93,$62,$CC,$40            
                         fcb     $0D,$13,$19,$33            
                         fcb     $47,$61,$6B,$73            
+; 7450
                         fcb     $7D,$89,$93,$9F            
                         fcb     $A5,$B2,$4E,$9D            
                         fcb     $90,$B8,$00,$76            
                         fcb     $56,$2A,$26,$B0            
+; 7460
                         fcb     $40,$BE,$42,$A6            
                         fcb     $64,$C1,$5C,$48            
                         fcb     $52,$BE,$0A,$0A            
                         fcb     $64,$C5,$92,$0C            
+; 7470
                         fcb     $26,$B8,$50,$6A            
                         fcb     $7C,$0C,$52,$74            
                         fcb     $EC,$4D,$C0,$A4            
                         fcb     $EC,$0A,$8A,$D4            
+; 7480
                         fcb     $EC,$0A,$64,$C5            
                         fcb     $92,$0D,$F2,$B8            
                         fcb     $5A,$93,$4E,$69            
                         fcb     $60,$4D,$C0,$9D            
+; 7490
                         fcb     $2C,$6C,$4A,$0D            
                         fcb     $A6,$C1,$70,$48            
                         fcb     $68,$2D,$8A,$0D            
                         fcb     $D2,$82,$4E,$3B            
+; 74A0
                         fcb     $66,$91,$6C,$0C            
                         fcb     $0A,$0C,$12,$C5            
                         fcb     $8B,$9D,$2C,$6C            
                         fcb     $4A,$0D,$D8,$6A            
+; 74B0
                         fcb     $60,$40,$00,$A6            
                         fcb     $60,$B9,$6C,$0D            
                         fcb     $F0,$2D,$B1,$76            
                         fcb     $52,$5C,$C2,$C2            
+; 74C0
                         fcb     $6C,$8B,$64,$2A            
                         fcb     $27,$18,$54,$69            
                         fcb     $D8,$28,$48,$0B            
                         fcb     $B2,$4A,$E6,$B8            
+; 74D0
                         fcb     $00,$18,$54,$69            
                         fcb     $D8,$28,$46,$0B            
                         fcb     $B2,$4A,$E7,$20            
                         fcb     $54,$69,$D8,$2D            
+; 74E0
                         fcb     $C2,$18,$5C,$CA            
                         fcb     $56,$98,$00,$3D            
                         fcb     $92,$43,$70,$9D            
                         fcb     $C3,$20,$5C,$CA            
+; 74F0
                         fcb     $56,$2D,$C2,$8B            
                         fcb     $64,$6C,$67                
+
 L74e7                   bit     $73                      ; 74E7:  24 73
                         bpl     L7514                    ; 74E9:  10 29
                         txa                              ; 74EB:  8A
@@ -2760,6 +2826,8 @@ L778d                   lda     $7628,Y                  ; 778D:  B9 28 76
                         fcb     $FF,$FF,$FF,$FF            
                         fcb     $FF,$FF,$FF,$FF            
                         fcb     $FF,$FF,$FF,$FF            
+
+; we jump here from 7c68 - having processed the Option switches
 L7844                   lda     #$00                     ; 7844:  A9 00
                         ldx     #$07                     ; 7846:  A2 07
 L7848                   sta     $9b,X                    ; 7848:  95 9B
@@ -2767,14 +2835,22 @@ L7848                   sta     $9b,X                    ; 7848:  95 9B
                         bpl     L7848                    ; 784B:  10 FB
                         sta     Pk_Ctl_All               ; 784D:  8D 08 2C
                         rts                              ; 7850:  60
-IRQ_Handler             bit     $01ff                    ; 7851:  2C FF 01
+
+
+
+; We get an NMI interrupt every 4mS
+
+NMI_Handler             bit     $01ff                    ; 7851:  2C FF 01
                         bpl     L7857                    ; 7854:  10 01
                         rti                              ; 7856:  40
+
+; save state - does the 6502 not do this???
 L7857                   pha                              ; 7857:  48
                         tya                              ; 7858:  98
                         pha                              ; 7859:  48
                         txa                              ; 785A:  8A
                         pha                              ; 785B:  48
+
                         cld                              ; 785C:  D8
                         lda     $01ff                    ; 785D:  AD FF 01
                         ora     $01d0                    ; 7860:  0D D0 01
@@ -2822,6 +2898,8 @@ L78a0                   lda     LCoinSW,X                ; 78A0:  BD 00 24
                         bcc     L78bc                    ; 78B8:  90 02
 L78ba                   sbc     #$01                     ; 78BA:  E9 01
 L78bc                   sta     $96,X                    ; 78BC:  95 96
+
+
                         lda     SlamSW                   ; 78BE:  AD 06 20
                         and     #$80                     ; 78C1:  29 80
                         beq     L78c9                    ; 78C3:  F0 04
@@ -2975,6 +3053,9 @@ L79ce                   sta     $fe                      ; 79CE:  85 FE
                         tay                              ; 79D3:  A8
                         pla                              ; 79D4:  68
                         rti                              ; 79D5:  40
+
+
+
 L79d6                   lda     #$d0                     ; 79D6:  A9 D0
                         bne     L79dc                    ; 79D8:  D0 02
 L79da                   lda     #$b0                     ; 79DA:  A9 B0
@@ -3251,34 +3332,58 @@ L7bfb                   sta     $0200,X                  ; 7BFB:  9D 00 02
                         lda     #$30                     ; 7C2F:  A9 30
                         sta     $02ed                    ; 7C31:  8D ED 02
 L7c34                   jsr     L7fcf                    ; 7C34:  20 CF 7F
+; Option87 - get bonus ship every how many points - bottom 2 bits
+; 00=10000, 01=12000, 10=15000, 11=none
+; 
                         lda     Option87                 ; 7C37:  AD 00 28
                         and     #$03                     ; 7C3A:  29 03
                         tay                              ; 7C3C:  A8
-                        lda     $7c6b,Y                  ; 7C3D:  B9 6B 7C
+
+                        lda     ExtraLifeTable,Y         ; 7C3D:  B9 6B 7C
                         sta     $f8                      ; 7C40:  85 F8
                         sta     $69                      ; 7C42:  85 69
                         sta     $6c                      ; 7C44:  85 6C
-                        bmi     L7c4a                    ; 7C46:  30 02
+                        bmi     NoExtraShips             ; 7C46:  30 02
                         lda     #$01                     ; 7C48:  A9 01
-L7c4a                   sta     $6a                      ; 7C4A:  85 6A
+NoExtraShips            sta     $6a                      ; 7C4A:  85 6A
                         sta     $f9                      ; 7C4C:  85 F9
                         sta     $6d                      ; 7C4E:  85 6D
+
+
+; Option43 - # ships to start with - bottom 2 bits: 00=2, 01=3, 10=4, 11=5
                         lda     #$03                     ; 7C50:  A9 03
                         and     Option43                 ; 7C52:  2D 02 28
                         tax                              ; 7C55:  AA
                         inx                              ; 7C56:  E8
                         inx                              ; 7C57:  E8
+; x = number of ships to start with
                         cpy     #$03                     ; 7C58:  C0 03
+; If options 87 are set for no extra ships, then start with an extra
+; life.
                         bne     L7c5d                    ; 7C5A:  D0 01
                         inx                              ; 7C5C:  E8
+; x = number of lives to start with
+
 L7c5d                   lda     $8d                      ; 7C5D:  A5 8D
                         and     #$03                     ; 7C5F:  29 03
                         cmp     #$03                     ; 7C61:  C9 03
                         bne     L7c66                    ; 7C63:  D0 01
+; if game costs 2 coins (50 cents in US money), start with an extra life
                         inx                              ; 7C65:  E8
 L7c66                   stx     $6e                      ; 7C66:  86 6E
                         jmp     L7844                    ; 7C68:  4C 44 78
-                        fcb     $00,$20,$50,$FF            
+
+; 7c6b
+; table for Options switches 8 and 7 which determines the score at which
+; you get an extra life (and multiples thereof). The table contains 
+; the number of hundreds (in bcd) of the score, so $50 means a score 
+; of 1 "50" 00. $FF means no extra life
+ExtraLifeTable 
+                        fcb     $00			 ; Extra ship every 1[00]00 points (10000)
+			fcb	$20			 ; Extra ship every 1[20]00 points (12000)
+			fcb	$50			 ; Extra ship every 1[50]00 points (15000)
+			fcb	$FF            		 ; No extra ship
+
 L7c6f                   ldx     #$d5                     ; 7C6F:  A2 D5
 L7c71                   sty     $09                      ; 7C71:  84 09
                         ldy     #$e0                     ; 7C73:  A0 E0
@@ -3328,6 +3433,7 @@ L7cb2                   ldx     $1b                      ; 7CB2:  A6 1B
 L7cc2                   jsr     L7cc5                    ; 7CC2:  20 C5 7C
 L7cc5                   ldx     $0c                      ; 7CC5:  A6 0C
                         dec     $0c                      ; 7CC7:  C6 0C
+
                         lda     Option87,X               ; 7CC9:  BD 00 28
                         and     #$03                     ; 7CCC:  29 03
 L7cce                   jsr     L79eb                    ; 7CCE:  20 EB 79
@@ -3339,11 +3445,20 @@ L7cd5                   ldy     #$00                     ; 7CD5:  A0 00
                         txa                              ; 7CDA:  8A
                         sta     ($03),Y                  ; 7CDB:  91 03
                         jmp     L7a55                    ; 7CDD:  4C 55 7A
+
+
+
+
+
 Reset_Handler           ldx     #$fe                     ; 7CE0:  A2 FE
                         txs                              ; 7CE2:  9A
                         cld                              ; 7CE3:  D8
+
+; Reset POKEY
                         ldx     #$00                     ; 7CE4:  A2 00
                         stx     Pk_SerCtl                ; 7CE6:  8E 0F 2C
+
+; Walking bit test of page 1 RAM
 L7ce9                   lda     #$11                     ; 7CE9:  A9 11
 L7ceb                   sta     $0100,X                  ; 7CEB:  9D 00 01
                         tay                              ; 7CEE:  A8
@@ -3352,6 +3467,7 @@ L7ceb                   sta     $0100,X                  ; 7CEB:  9D 00 01
                         tya                              ; 7CF4:  98
                         asl     A                        ; 7CF5:  0A
                         bcc     L7ceb                    ; 7CF6:  90 F3
+
                         txa                              ; 7CF8:  8A
                         sta     $00,X                    ; 7CF9:  95 00
                         sta     $0100,X                  ; 7CFB:  9D 00 01
@@ -3367,6 +3483,8 @@ L7ceb                   sta     $0100,X                  ; 7CEB:  9D 00 01
                         sta     $4700,X                  ; 7D19:  9D 00 47
                         dex                              ; 7D1C:  CA
                         bne     L7ce9                    ; 7D1D:  D0 CA
+
+
                         sta     WdogReset                ; 7D1F:  8D 00 34
 L7d22                   txa                              ; 7D22:  8A
 L7d23                   eor     $0100,X                  ; 7D23:  5D 00 01
@@ -3388,6 +3506,9 @@ L7d3c                   txa                              ; 7D3C:  8A
 L7d43                   sta     $00,X                    ; 7D43:  95 00
                         tay                              ; 7D45:  A8
                         eor     $00,X                    ; 7D46:  55 00
+
+
+; Land here if memory test fails??
 L7d48                   bne     L7d8b                    ; 7D48:  D0 41
                         tya                              ; 7D4A:  98
                         asl     A                        ; 7D4B:  0A
@@ -3478,6 +3599,8 @@ L7de1                   bit     ThreeKHz                 ; 7DE1:  2C 01 20
                         bne     L7ddc                    ; 7DED:  D0 ED
                         tax                              ; 7DEF:  AA
                         bne     L7dae                    ; 7DF0:  D0 BC
+
+
 L7df2                   sta     WdogReset                ; 7DF2:  8D 00 34
                         lda     SelfTestSW               ; 7DF5:  AD 07 20
                         bmi     L7df2                    ; 7DF8:  30 F8
@@ -3525,18 +3648,26 @@ L7e4c                   lda     ThreeKHz                 ; 7E4C:  AD 01 20
                         bmi     L7e4c                    ; 7E4F:  30 FB
                         dex                              ; 7E51:  CA
                         bpl     L7e47                    ; 7E52:  10 F3
+
+; Wait for VG to halt
 L7e54                   bit     VGHalted                 ; 7E54:  2C 02 20
                         bmi     L7e54                    ; 7E57:  30 FB
+
                         sta     WdogReset                ; 7E59:  8D 00 34
+
                         lda     #$00                     ; 7E5C:  A9 00
                         sta     $03                      ; 7E5E:  85 03
                         lda     #$40                     ; 7E60:  A9 40
                         sta     $04                      ; 7E62:  85 04
+
+
                         lda     SelfTestSW               ; 7E64:  AD 07 20
                         and     #$80                     ; 7E67:  29 80
                         bne     L7e71                    ; 7E69:  D0 06
                         sta     $01ff                    ; 7E6B:  8D FF 01
                         jmp     L6000                    ; 7E6E:  4C 00 60
+
+
 L7e71                   lda     $1a                      ; 7E71:  A5 1A
                         beq     L7e7c                    ; 7E73:  F0 07
                         ldx     #$cc                     ; 7E75:  A2 CC
@@ -3630,6 +3761,7 @@ L7f2d                   lda     $d4                      ; 7F2D:  A5 D4
                         ldx     #$cb                     ; 7F31:  A2 CB
                         lda     #$f4                     ; 7F33:  A9 F4
                         jsr     L7cd5                    ; 7F35:  20 D5 7C
+
 L7f38                   inc     $76                      ; 7F38:  E6 76
                         lda     FireSW                   ; 7F3A:  AD 04 20
                         and     ThrustSW                 ; 7F3D:  2D 05 24
