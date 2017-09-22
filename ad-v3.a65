@@ -3490,9 +3490,14 @@ L7d22                   txa                              ; 7D22:  8A
 L7d23                   eor     $0100,X                  ; 7D23:  5D 00 01
                         bne     L7d48                    ; 7D26:  D0 20
                         sta     $0100,X                  ; 7D28:  9D 00 01
+
+
                         inx                              ; 7D2B:  E8
                         bit     SelfTestSW               ; 7D2C:  2C 07 20
                         bpl     L7d36                    ; 7D2F:  10 05
+
+
+; Self test switch is on
                         txa                              ; 7D31:  8A
                         bne     L7d23                    ; 7D32:  D0 EF
                         beq     L7d3c                    ; 7D34:  F0 06
