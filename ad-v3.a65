@@ -28,8 +28,11 @@ Pk_F3_Pot4            = $2c04
 Pk_C3_Pot5            = $2c05
 Pk_F4_Pot6            = $2c06
 Pk_C4_Pot7            = $2c07
-Pk_Ctl_All            = $2c08
+Pk_All_Pot            = $2c08			; Read
+Pk_Aud_Ctl	      = $2c08			; Write
 Pk_STim_Kbc           = $2c09
+Pk_Kbcode	      = $2c09			; Read
+Pk_Stimers	      = $sc09			: Write
 Pk_SkRes_Rnd          = $2c0a
 Pk_PotGo              = $2c0b
 Pk_SerData            = $2c0d
@@ -2833,7 +2836,7 @@ L7844                   lda     #$00                     ; 7844:  A9 00
 L7848                   sta     $9b,X                    ; 7848:  95 9B
                         dex                              ; 784A:  CA
                         bpl     L7848                    ; 784B:  10 FB
-                        sta     Pk_Ctl_All               ; 784D:  8D 08 2C
+                        sta     Pk_Aud_Ctl               ; 784D:  8D 08 2C
                         rts                              ; 7850:  60
 
 
@@ -2877,7 +2880,7 @@ L7889                   dex                              ; 7889:  CA
                         ldx     #$07                     ; 788C:  A2 07
                         stx     Pk_SerCtl                ; 788E:  8E 0F 2C
                         stx     Pk_PotGo                 ; 7891:  8E 0B 2C
-                        lda     Pk_Ctl_All               ; 7894:  AD 08 2C
+                        lda     Pk_All_Pot               ; 7894:  AD 08 2C
                         eor     #$ff                     ; 7897:  49 FF
                         sta     $8d                      ; 7899:  85 8D
 L789b                   jsr     L7742                    ; 789B:  20 42 77
@@ -3725,7 +3728,7 @@ L7ea7                   dex                              ; 7EA7:  CA
                         lda     #$07                     ; 7EDB:  A9 07
                         sta     Pk_SerCtl                ; 7EDD:  8D 0F 2C
                         sta     Pk_PotGo                 ; 7EE0:  8D 0B 2C
-                        lda     Pk_Ctl_All               ; 7EE3:  AD 08 2C
+                        lda     Pk_All_Pot               ; 7EE3:  AD 08 2C
                         eor     #$ff                     ; 7EE6:  49 FF
                         sta     $0c                      ; 7EE8:  85 0C
                         sta     $8d                      ; 7EEA:  85 8D
@@ -3851,7 +3854,7 @@ L7fdd                   cmp     $d4,X                    ; 7FDD:  D5 D4
 L7fe2                   dex                              ; 7FE2:  CA
                         bne     L7fdd                    ; 7FE3:  D0 F8
                         cpy     #$04                     ; 7FE5:  C0 04
-                        lda     Pk_Ctl_All               ; 7FE7:  AD 08 2C
+                        lda     Pk_All_Pot               ; 7FE7:  AD 08 2C
                         ror     A                        ; 7FEA:  6A
                         sta     $d4                      ; 7FEB:  85 D4
                         rts                              ; 7FED:  60
