@@ -124,35 +124,56 @@ Reset_Handler		andcc	#$af			; Disable IRQ/FIRQ
 			ldx	#0
 
 ; Test the byte pointed to by X
-testByte		ldb	#1			; Walking bit test
-			stb	,x
+testByte   		ldb     #1			; Walking bit test
+			sta     WdogReset		; Keep the watchdog happy
+testBit			stb	,x
 			tfr	b,a
 			eora	,x
 			bne	badRam
-			lsrb
-			bcc	testByte
+			lslb
+			bcc	testBit
 
 ; Move on to the next byte
        	     	        leax	1,x
 			cmpx	#$4800			; End of VRAM?
 			beq	goodRam
 			cmpx	#$0400			; End of RAM?
-			bne	testByte
+			bne	testByte		; On to the next byte
 
 ; We've hit the end of memory - move on to the VRAM
   	    	        ldx     #$4000			; Start of VRAM
-			bra	testByte
+			bra	testByte		; On to the next byte
 
 ; Memory test failed.
-badRam			lda	#0			; Turn LEDs on
+badRam			lda	#0			; Turn the P1 LED on
 			sta	P1LED
-			sta	P2LED
 			bra	badRam
 
 ; Memory test succeded.
-goodRam			lda	#$80			; Turn LEDs off
+goodRam			lda	#$80			; Turn the P1 LED off
 			sta	P1LED
+
+; Check the SelfTest switch
+			tst	SelfTestSW
+			bmi	doSelfTest
+
+; Run the game
+doGame			lda	#$80			; Turn the P2 LED off
 			sta	P2LED
+			bra	doGame
+
+; Self test
+doSelfTest		lda	#0			; Turn the P2 LED on
+			sta	P2LED
+
+; There's a bunch of code from around $7D36 to $7E54 that I've ignored for now
+
+waitVG	    	     	tst    VGHalted	       	     	; Wait for the VG to finish
+			bmi    waitVG
+
+			sta    WdogReset
+
+
 			bra	goodRam
 
 ; Null handler
