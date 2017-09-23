@@ -1,0 +1,170 @@
+
+			
+                        pragma  autobranchlength           
+                        pragma  6809                       
+
+; Labels:
+;
+ThreeKHz                = $2001
+VGHalted                = $2002
+ShieldSW                = $2003
+FireSW                  = $2004
+SlamSW                  = $2006
+SelfTestSW              = $2007
+LCoinSW                 = $2400
+CCoinSW                 = $2401
+RCoinSW                 = $2402
+PlayerOneSW             = $2403
+PlayerTwoSW             = $2404
+ThrustSW                = $2405
+RotateRSW               = $2406
+RotateLSW               = $2407
+Option87                = $2800
+Option65                = $2801
+Option43                = $2802
+Option21                = $2803
+
+; POKEY Registers
+Pk_F1_Pot0		= $2c00
+PKW_AudF1	      	= $2c00
+PKR_Pot0	      	= $2c00
+
+Pk_C1_Pot1            	= $2c01
+PKW_AucC1	      	= $2c01
+PKR_POt1	      	= $2c01
+
+Pk_F2_Pot2            	= $2c02
+PKW_AudF2	      	= $2c02
+PKR_Pot2	      	= $2c02
+
+Pk_C2_Pot3            	= $2c03
+PKW_AudC2	      	= $2c03
+PKR_Pot3	      	= $2c03
+
+Pk_F3_Pot4            	= $2c04
+PKW_AudF3	      	= $2c04
+PKR_Pot4	      	= $2c04
+
+Pk_C3_Pot5            	= $2c05
+PKW_AudC3	      	= $2c05
+PKR_Pot5	      	= $2c05
+
+Pk_F4_Pot6            	= $2c06
+PKW_AudF4	      	= $2c06
+PKR_Pot6	      	= $2c06
+
+Pk_C4_Pot7            	= $2c07
+PKW_AudC4	      	= $2c07
+PKR_Pot7	      	= $2c07
+
+PKW_AudCTL	      	= $2c08
+Pk_Aud_Ctl	      	= $2c08			; Write
+Pk_All_Pot            	= $2c08			; Read
+PKR_AllPot	      	= $2c08
+
+Pk_STim_Kbc           	= $2c09
+PKW_STimer	      	= $2c09
+PKR_KbCode	      	= $2c09
+Pk_Kbcode	      	= $2c09			; Read
+Pk_Stimers	      	= $2c09			: Write
+
+Pk_SkRes_Rnd          	= $2c0a
+PKW_SKRest	      	= $2c0a
+PKR_Random	      	= $2c0a
+
+Pk_PotGo              	= $2c0b
+PKW_PotGo	      	= $2c0b
+
+Pk_SerData            	= $2c0d
+PKW_SerOut	      	= $2c0d
+PKR_SerIn	      	= $2c0d
+
+Pk_IrqCtl             	= $2c0e
+PKW_IRQEn	      	= $2c0e
+PKR_IRQSt	      	= $2c0e
+
+Pk_SerCtl             	= $2c0f
+PKW_SKCtl	      	= $2c0f
+PKR_SKStat	      	= $2c0f
+
+
+EaromRd                 = $2c40
+StartVG                 = $3000
+LatchEA                 = $3200
+WdogReset               = $3400
+ExplodeCtrl             = $3600
+VGReset                 = $3800
+EAControl               = $3a00
+P1LED                   = $3c00
+P2LED                   = $3c01
+ThrustSnd               = $3c03
+BankSel                 = $3c04
+LCount                  = $3c05
+CCount                  = $3c06
+RCoin                   = $3c07
+NoiseReset              = $3e00
+VRAM                    = $4000
+
+
+
+                        org     $c000                      
+
+;
+; Device reset - set a safe stack, conduct a memory test, basic initialisation
+;
+Reset_Handler		andcc	#$af			; Disable IRQ/FIRQ
+			lds	#$0400			; Init stack
+
+			lda	#0			; Point DP at Page 0 for
+			tfr	a,dp			; 6502 compatibilty
+
+			ldb	#0			; POKEY: Disable kb scan
+			stb	PKW_SKCtl		; and fast Pot scanning
+
+			ldx	#0
+
+; Test the byte pointed to by X
+testByte		ldb	#1			; Walking bit test
+			stb	,x
+			tfr	b,a
+			eora	,x
+			bne	badRam
+			lsrb
+			bcc	testByte
+
+; Move on to the next byte
+       	     	        leax	1,x
+			cmpx	#$4800			; End of VRAM?
+			beq	goodRam
+			cmpx	#$0400			; End of RAM?
+			bne	testByte
+
+; We've hit the end of memory - move on to the VRAM
+  	    	        ldx     #$4000			; Start of VRAM
+			bra	testByte
+
+; Memory test failed.
+badRam			lda	#0			; Turn LEDs on
+			sta	P1LED
+			sta	P2LED
+			bra	badRam
+
+; Memory test succeded.
+goodRam			lda	#$80			; Turn LEDs off
+			sta	P1LED
+			sta	P2LED
+			bra	goodRam
+
+; Null handler
+No_Handler		rti
+
+; Vectors
+			org     $fff0			 ; Vectors
+			fdb	No_Handler		 ; Reserved
+			fdb	No_Handler		 ; SWI3
+			fdb	No_Handler		 ; SWI2
+			fdb	No_Handler		 ; FIRQ
+			fdb	No_Handler		 ; IRQ
+			fdb	No_Handler		 ; SWI
+			fdb	Reset_Handler		 ; NMI - treated same as reset
+			fdb	Reset_Handler		 ; RESET
