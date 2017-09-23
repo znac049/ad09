@@ -1,7 +1,6 @@
-
-			
                         pragma  autobranchlength           
-                        pragma  6809                       
+                        pragma  6309
+
 
 ; Labels:
 ;
@@ -160,7 +159,15 @@ goodRam			lda	#$80			; Turn the P1 LED off
 ; Run the game
 doGame			lda	#$80			; Turn the P2 LED off
 			sta	P2LED
-			bra	doGame
+
+dgWait			tst	VGHalted
+			bmi	dgWait
+
+			bsr	progPlus
+			sta	StartVG
+
+dgDone			sta	WdogReset
+			bra	dgDone
 
 ; Self test
 doSelfTest		lda	#0			; Turn the P2 LED on
@@ -171,10 +178,44 @@ doSelfTest		lda	#0			; Turn the P2 LED on
 waitVG	    	     	tst    VGHalted	       	     	; Wait for the VG to finish
 			bmi    waitVG
 
-			sta    WdogReset
+			bsr    progStar
+			sta    StartVG
+
+stDone			sta    WdogReset
+			bra    stDone
 
 
-			bra	goodRam
+; Vector Generator code to draw a star on the screen. This code
+; was derived from test code in the CatBoc user guide.
+starCode   	     	fcb    $FF,$A3,$FF,$03		; Beam To x=1023,y=1023
+			fcb    $FF,$97,$FF,$97		; Draw rel x=-1023, y=-1023, intensity=9
+			fcb    $FF,$A3,$00,$00		; Beam To x=0, y=1023
+			fcb    $FF,$97,$FF,$33		; Draw rel x=1023, y=-1023, intensity=3
+			fcb    $00,$E0			; Jump 0
+_starLen		equ    * - starCode
+
+; Program the vector memory to draw a plus on the screen. This code
+; was taken straight out of the CatBoc user guide.
+plusCode   	     	fcb    $FF,$A3,$00,$02		; Beam To x=512,y=1023
+			fcb    $FF,$97,$00,$90		; Draw rel x=0, y=-1023, intensity=9
+			fcb    $00,$A2,$00,$00		; Beam To x-0, y=512
+			fcb    $00,$90,$FF,$33		; Draw rel x=1024, y=0, intensity=3
+			fcb    $00,$E0			; Jump 0
+_plusLen		equ    * - plusCode
+
+
+progStar   	       	ldx    #starCode
+			ldw    #_starLen
+			bra    progVG
+
+progPlus		ldx    #plusCode
+			ldw    #_plusLen
+
+progVG			ldy    #VRAM
+			tfm    x+,y+
+			rts
+
+
 
 ; Null handler
 No_Handler		rti
