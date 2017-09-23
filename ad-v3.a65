@@ -20,24 +20,72 @@ Option87              = $2800
 Option65              = $2801
 Option43              = $2802
 Option21              = $2803
+
+
+; POKEY Registers
 Pk_F1_Pot0            = $2c00
+PKW_AudF1	      = $2c00
+PKR_Pot0	      = $2c00
+
 Pk_C1_Pot1            = $2c01
+PKW_AucC1	      = $2c01
+PKR_POt1	      = $2c01
+
 Pk_F2_Pot2            = $2c02
+PKW_AudF2	      = $2c02
+PKR_Pot2	      = $2c02
+
 Pk_C2_Pot3            = $2c03
+PKW_AudC2	      = $2c03
+PKR_Pot3	      = $2c03
+
 Pk_F3_Pot4            = $2c04
+PKW_AudF3	      = $2c04
+PKR_Pot4	      = $2c04
+
 Pk_C3_Pot5            = $2c05
+PKW_AudC3	      = $2c05
+PKR_Pot5	      = $sc05
+
 Pk_F4_Pot6            = $2c06
+PKW_AudF4	      = $2c06
+PKR_Pot6	      = $2c06
+
 Pk_C4_Pot7            = $2c07
-Pk_All_Pot            = $2c08			; Read
+PKW_AudC4	      = $2c07
+PKR_Pot7	      = $2c07
+
+PKW_AudCTL	      = $2c08
 Pk_Aud_Ctl	      = $2c08			; Write
+Pk_All_Pot            = $2c08			; Read
+PKR_AllPot	      = $2c08
+
 Pk_STim_Kbc           = $2c09
+PKW_STimer	      = $2c09
+PKR_KbCode	      = $2c09
 Pk_Kbcode	      = $2c09			; Read
 Pk_Stimers	      = $sc09			: Write
+
 Pk_SkRes_Rnd          = $2c0a
+PKW_SKRest	      = $2c0a
+PKR_Random	      = $2c0a
+
 Pk_PotGo              = $2c0b
+PKW_PotGo	      = $2c0b
+
 Pk_SerData            = $2c0d
+PKW_SerOut	      = $2c0d
+PKR_SerIn	      = $2c0d
+
 Pk_IrqCtl             = $2c0e
+PKW_IRQEn	      = $2c0e
+PKR_IRQSt	      = $2c0e
+
 Pk_SerCtl             = $2c0f
+PKW_SKCtl	      = $2c0f
+PKR_SKStat	      = $2c0f
+
+
 EaromRd               = $2c40
 StartVG               = $3000
 LatchEA               = $3200
