@@ -121,12 +121,11 @@ Reset_Handler		andcc	#$af			; Disable IRQ/FIRQ
 again			sta	P1LED
 			stb	P2LED
 
-			ldy	#3			; At 1.5MHz this will delay
-outer_loop		ldx	#62500			; for about 1 sec
+			ldy	#5			; At 1.5MHz this will delay
+outer_loop		ldx	#25000			; for about 1 sec
 
-			sta     WdogReset		; Keep the watchdog happy
-
-inner_loop		leax	-1,x
+inner_loop		sta     WdogReset		; Keep the watchdog happy
+			leax	-1,x
 			bne	inner_loop
 
 			leay	-1,y
