@@ -1,6 +1,6 @@
                         pragma  autobranchlength           
                         pragma  6309
-			pragma 	c
+			pragma	c
 
 
 ; Labels:
@@ -110,112 +110,30 @@ VRAM                    = $4000
                         org     $c000                      
 
 ;
-; Device reset - set a safe stack, conduct a memory test, basic initialisation
+; Device reset - alternately flas the P1 and P2 leds at a rate of every 1 sec
+; no RAM required
 ;
 Reset_Handler		andcc	#$af			; Disable IRQ/FIRQ
-			lds	#$0400			; Init stack
 
-			lda	#0			; Point DP at Page 0 for
-			tfr	a,dp			; 6502 compatibilty
+			lda	#$00			; P1 LED
+			ldb	#$80			; P2 LED
 
-			ldb	#0			; POKEY: Disable kb scan
-			stb	PKW_SKCtl		; and fast Pot scanning
+again			sta	P1LED
+			stb	P2LED
 
-			ldx	#0
+			ldy	#3			; At 1.5MHz this will delay
+outer_loop		ldx	#62500			; for about 1 sec
 
-; Test the byte pointed to by X
-testByte   		ldb     #1			; Walking bit test
 			sta     WdogReset		; Keep the watchdog happy
-testBit			stb	,x
-			tfr	b,a
-			eora	,x
-			bne	badRam
-			lslb
-			bcc	testBit
 
-; Move on to the next byte
-       	     	        leax	1,x
-			cmpx	#$4800			; End of VRAM?
-			beq	goodRam
-			cmpx	#$0400			; End of RAM?
-			bne	testByte		; On to the next byte
+inner_loop		leax	-1,x
+			bne	inner_loop
 
-; We've hit the end of memory - move on to the VRAM
-  	    	        ldx     #$4000			; Start of VRAM
-			bra	testByte		; On to the next byte
+			leay	-1,y
+			bne	outer_loop
 
-; Memory test failed.
-badRam			lda	#0			; Turn the P1 LED on
-			sta	P1LED
-			bra	badRam
-
-; Memory test succeded.
-goodRam			lda	#$80			; Turn the P1 LED off
-			sta	P1LED
-
-; Check the SelfTest switch
-			tst	SelfTestSW
-			bmi	doSelfTest
-
-; Run the game
-doGame			lda	#$80			; Turn the P2 LED off
-			sta	P2LED
-
-dgWait			tst	VGHalted
-			bmi	dgWait
-
-			bsr	progPlus
-			sta	StartVG
-
-dgDone			sta	WdogReset
-			bra	dgDone
-
-; Self test
-doSelfTest		lda	#0			; Turn the P2 LED on
-			sta	P2LED
-
-; There's a bunch of code from around $7D36 to $7E54 that I've ignored for now
-
-waitVG	    	     	tst    VGHalted	       	     	; Wait for the VG to finish
-			bmi    waitVG
-
-			bsr    progStar
-			sta    StartVG
-
-stDone			sta    WdogReset
-			bra    stDone
-
-
-; Vector Generator code to draw a star on the screen. This code
-; was derived from test code in the CatBoc user guide.
-starCode   	     	fcb    $FF,$A3,$FF,$03		; Beam To x=1023,y=1023
-			fcb    $FF,$97,$FF,$97		; Draw rel x=-1023, y=-1023, intensity=9
-			fcb    $FF,$A3,$00,$00		; Beam To x=0, y=1023
-			fcb    $FF,$97,$FF,$33		; Draw rel x=1023, y=-1023, intensity=3
-			fcb    $00,$E0			; Jump 0
-_starLen		equ    * - starCode
-
-; Program the vector memory to draw a plus on the screen. This code
-; was taken straight out of the CatBoc user guide.
-plusCode   	     	fcb    $FF,$A3,$00,$02		; Beam To x=512,y=1023
-			fcb    $FF,$97,$00,$90		; Draw rel x=0, y=-1023, intensity=9
-			fcb    $00,$A2,$00,$00		; Beam To x-0, y=512
-			fcb    $00,$90,$FF,$33		; Draw rel x=1024, y=0, intensity=3
-			fcb    $00,$E0			; Jump 0
-_plusLen		equ    * - plusCode
-
-
-progStar   	       	ldx    #starCode
-			ldw    #_starLen
-			bra    progVG
-
-progPlus		ldx    #plusCode
-			ldw    #_plusLen
-
-progVG			ldy    #VRAM
-			tfm    x+,y+
-			rts
-
+			exg	a,b
+			bra	again
 
 
 ; Null handler
@@ -229,5 +147,5 @@ No_Handler		rti
 			fdb	No_Handler		 ; FIRQ
 			fdb	No_Handler		 ; IRQ
 			fdb	No_Handler		 ; SWI
-			fdb	Reset_Handler		 ; NMI - treated same as reset
+			fdb	No_Handler		 ; NMI - treated same as reset
 			fdb	Reset_Handler		 ; RESET

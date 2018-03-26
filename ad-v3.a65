@@ -2211,6 +2211,9 @@ L710b                   cmp     #$41                     ; 710B:  C9 41
 L7113                   tax                              ; 7113:  AA
                         lda     $4b61,X                  ; 7114:  BD 61 4B
                         rts                              ; 7117:  60
+
+
+
 L7118                   lda     #$04                     ; 7118:  A9 04
                         sta     $76                      ; 711A:  85 76
 L711c                   jsr     L4ba2                    ; 711C:  20 A2 4B
@@ -2315,6 +2318,8 @@ L71c4                   tax                              ; 71C4:  AA
                         iny                              ; 71D0:  C8
                         ldx     #$00                     ; 71D1:  A2 00
                         rts                              ; 71D3:  60
+
+
                         fcb     $68,$B6,$72,$B6            
                         fcb     $0C,$AA,$0C,$A2            
                         fcb     $0C,$9A,$0C,$92            
@@ -2826,6 +2831,8 @@ L7784                   lda     $a3,X                    ; 7784:  B5 A3
                         dex                              ; 7789:  CA
                         bpl     L7744                    ; 778A:  10 B8
                         rts                              ; 778C:  60
+
+
 L778d                   lda     $7628,Y                  ; 778D:  B9 28 76
                         beq     L777f                    ; 7790:  F0 ED
                         sta     $bb,X                    ; 7792:  95 BB
@@ -3346,11 +3353,17 @@ L7bc7                   ldy     $cd                      ; 7BC7:  A4 CD
                         sty     $ce                      ; 7BDE:  84 CE
                         sty     $d0                      ; 7BE0:  84 D0
 L7be2                   rts                              ; 7BE2:  60
+
+
+; Write some code to VRAM
 L7be3                   bit     VGHalted                 ; 7BE3:  2C 02 20
                         bmi     L7be3                    ; 7BE6:  30 FB
                         jsr     L7118                    ; 7BE8:  20 18 71
+
+; Write a DVG HALT instruction
                         lda     #$b0                     ; 7BEB:  A9 B0
                         sta     $4003                    ; 7BED:  8D 03 40
+
                         lda     #$00                     ; 7BF0:  A9 00
                         ldx     #$03                     ; 7BF2:  A2 03
 L7bf4                   sta     $61,X                    ; 7BF4:  95 61
