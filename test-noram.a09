@@ -107,7 +107,7 @@ VRAM                    = $4000
 
 
 
-                        org     $c000                      
+                        org     $e000
 
 ;
 ; Device reset - alternately flas the P1 and P2 leds at a rate of every 1 sec
@@ -138,8 +138,10 @@ inner_loop		sta     WdogReset		; Keep the watchdog happy
 ; Null handler
 No_Handler		rti
 
+			fill	42,$fff0-*
+
 ; Vectors
-			org     $fff0			 ; Vectors
+Vectors			org     $fff0			 ; Vectors
 			fdb	No_Handler		 ; Reserved
 			fdb	No_Handler		 ; SWI3
 			fdb	No_Handler		 ; SWI2
