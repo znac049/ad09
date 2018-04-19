@@ -107,7 +107,7 @@ VRAM                    = $4000
 
 
 
-                        org     $c000                      
+                        org     $e000                      
 
 ;
 ; Device reset - set a safe stack, conduct a memory test, basic initialisation
