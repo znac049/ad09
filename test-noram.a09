@@ -110,7 +110,7 @@ VRAM                    = $4000
                         org     $e000
 
 ;
-; Device reset - alternately flas the P1 and P2 leds at a rate of every 1 sec
+; Device reset - alternately flash the P1 and P2 leds at a rate of every 1 sec
 ; no RAM required
 ;
 Reset_Handler		andcc	#$af			; Disable IRQ/FIRQ

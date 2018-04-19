@@ -221,6 +221,8 @@ progVG			ldy    #VRAM
 ; Null handler
 No_Handler		rti
 
+      fill  42,$fff0-*
+
 ; Vectors
 			org     $fff0			 ; Vectors
 			fdb	No_Handler		 ; Reserved
