@@ -7,4 +7,5 @@ clean:
 
 assemble:
 	lwasm --format=raw --list=ad-v3.lst --output=ad-v3.bin ad-v3.a09
+	lwasm --format=raw --list=simple-test.lst --output=simple-test.bin simple-test.a09
 	lwasm --format=raw --list=test-noram.lst --output=test-noram.bin test-noram.a09
